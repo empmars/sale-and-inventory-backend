@@ -110,24 +110,46 @@ app.post('/sale-item-add', function(req,res) {
 
             knex('items')
             .where({name: name})
-            .select('price')
+            .select('price' , 'quantity' , 'profit')
             .then(result1=>{
                  var singlePrice = result1[0].price;
-                 price = singlePrice * quantity
-            
-                 knex('sale')
-                  .insert({
+
+                 if(discount !== '') {
+
+                  discount = Number(discount)
+                  var discAmnt = Math.round((discount/100) * singlePrice);
+                  var totalDiscAmnt = discAmnt * quantity
+
+                  // SUM
+
+                  var finalSinglePrice = singlePrice - discAmnt;
+                  var sum = Math.round(finalSinglePrice * quantity)
+
+                  // PROFIT 
+ 
+                  var rmngProfit = result1[0].profit - discAmnt
+
+
+
+                 } else {
+                  var sum = Math.round(singlePrice * quantity)
+                  var discAmnt = 0;
+                  var rmngProfit = result1[0].profit
+                 }
+
+                 const response = {
                     name: name,
                     quantity: quantity,
-                    price: price,
-                    discount: discount,
-                    date: new Date()
+                    singlePrice: singlePrice,
+                    discount: discAmnt,
+                    profit: rmngProfit,
+                    sum: sum
 
-                  })
-                  .returning('*')
-                  .then(result2=>{
-                    res.json(result2)
-                  })
+                 }
+
+                 res.json(response)
+            
+                 
 
             })
             .then(trx.commit)
@@ -151,7 +173,46 @@ app.post('/sale-item-add', function(req,res) {
 
 })
 
+app.post('/final-sale-add', function(req,res) {
+    const { arr , total } = req.body
+    console.log()
 
+        for(var i = 0 ; i < arr.length ; i++ ) {
+             var a = i
+              knex('items')
+              .where({name : arr[i][0]})
+              .select('*')
+              .then(result=>{
+                  var first = Number(result[0].profit)
+                  console.log(a)
+
+                  var second = Number(arr[a][1])
+                  var totalProfit = first * second
+                  knex('sale')
+                  .insert({
+                    items: arr[a][0],
+                    quantity: arr[a][1],
+                    profit: totalProfit,
+                    discount: arr[a][2],
+                    sum: arr[a][3],
+                    date: new Date()
+                  })
+                  .then( result2=> {
+                    console.log('oj')
+                  })
+
+              })
+
+        }
+    knex('sale')
+    .insert({
+      sum: total
+    })    
+    .then(result=>{
+      console.log('ok2')
+    })
+
+})
 
 
 
