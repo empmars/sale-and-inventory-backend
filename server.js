@@ -50,7 +50,7 @@ app.post('/add-item', function (req, res) {
                         res.json('success')
                     })
                     .catch(err=>res.json(err.detail))
-          } 
+          }
           else (
               res.json('Please fill all fields.')
           )
@@ -66,7 +66,7 @@ app.post('/table', function(req,res) {
       console.log(result.length)
     if (result.length === 0) {
         res.json('Item does not exist.')
-    } 
+    }
     else {
         res.json(result[0])
     }
@@ -78,7 +78,7 @@ app.post('/table', function(req,res) {
 
 app.put('/del-item', function(req,res) {
   console.log(req.body)
-    
+
       knex('items')
       .where({name: req.body.name})
       .del()
@@ -95,7 +95,7 @@ app.post('/sale-item-search', function(req,res) {
     knex('items')
     .select('name')
     .then(result=>{
-     
+
       const matched = result.filter((item)=>{
         return (item.name.toLowerCase().includes(name))
       })
@@ -124,8 +124,8 @@ app.post('/sale-item-add', function(req,res) {
                   var finalSinglePrice = singlePrice - discAmnt;
                   var sum = Math.round(finalSinglePrice * quantity)
 
-                  // PROFIT 
- 
+                  // PROFIT
+
                   var rmngProfit = result1[0].profit - discAmnt
 
 
@@ -147,8 +147,8 @@ app.post('/sale-item-add', function(req,res) {
                  }
 
                  res.json(response)
-            
-                 
+
+
 
             })
           .catch(err=>console.log(err))
@@ -169,7 +169,7 @@ app.post('/sale-item-add', function(req,res) {
 })
 
 app.post('/final-sale-add', function(req,res) {
-    
+
         var { arr , total } = req.body
 
         arr.forEach((saleData , i)=>{
@@ -184,7 +184,7 @@ app.post('/final-sale-add', function(req,res) {
                   .then(result1=>{
 
                           var totalProfit = (Number(saleData[1]) * Number(result1[0].profit) - Number(saleData[2]))
-                  
+
                           return trx('sale')
                           .insert({
                               items: JSON.stringify(saleData[0]),
@@ -192,7 +192,8 @@ app.post('/final-sale-add', function(req,res) {
                               discount: saleData[2],
                               profit: totalProfit,
                               sum: saleData[3],
-                              date: new Date()
+                              date: new Date(),
+                              total: 0
 
                           })
                           .then(result1=> {
@@ -207,7 +208,7 @@ app.post('/final-sale-add', function(req,res) {
                                 })
 
                               }
-                          
+
                         })
                         .then(result3=>{
 
@@ -227,7 +228,7 @@ app.post('/final-sale-add', function(req,res) {
                    })
                    .catch(err=>res.json(err.detail + 'Issue while fetching from items db.'))
 
-       
+
                    })
 
 
@@ -256,7 +257,7 @@ app.post('/final-sale-add', function(req,res) {
       //                 .where({name : arr[i][0]})
       //                 .then(result=>{
       //                     var first = Number(result[0].profit)
-      //                     console.log(a)             
+      //                     console.log(a)
       //                   var second = Number(arr[a][1])
       //                     var totalProfit = first * second
       //                     return trx('sale')
@@ -270,13 +271,13 @@ app.post('/final-sale-add', function(req,res) {
       //                     })
       //                     .then( result2=> {
       //                      console.log('ok')
-                              
+
       //                     })
       //                 })
       //                     .then(trx.commit)
       //                     .then(trx.rollback)
 
-                      
+
       //           }
 
       // })
@@ -284,15 +285,15 @@ app.post('/final-sale-add', function(req,res) {
           //  knex('sale')
           //  .insert({
           //   sum: total
-          //   })    
+          //   })
           // .then(result=>{
           //    console.log('ok2')
           //   })
-    
 
-    
-  
-    // 
+
+
+
+    //
 
 })
 
@@ -336,7 +337,7 @@ app.post('/fetch-all-items-filter' , function(req,res) {
 
                          res.json(filteredItems)
                         }
-                    
+
                      })
 
                     }
@@ -351,14 +352,14 @@ app.post('/fetch-all-items-filter' , function(req,res) {
                           .orderBy('id' , 'asc')
                           .then(result=>{
                             filteredItems =  filteredItems.concat(result)
-                            
+
                             console.log(filteredItems)
                             if( i === state.length - 1 ) {
 
                              res.json(filteredItems)
                             }
-                           
-                             
+
+
                           })
                     }
 
@@ -369,13 +370,86 @@ app.post('/fetch-all-items-filter' , function(req,res) {
 
 app.post('/fetch-filter-quan' , function(req,res) {
         var { quan } = req.body
-        
+
           knex('items')
           .select('*')
           .where('quantity' , '<' , quan )
+          .orderBy('id' , 'asc')
           .then(result=>{
             res.json(result)
           })
+
+})
+
+app.post('/fetch-filter-price' , function(req,res) {
+        var { price } = req.body
+        console.log(req.body)
+
+          knex('items')
+          .select('*')
+          .where('price' , '<' ,  price )
+          .then(result=>{
+            res.json(result)
+          })
+
+})
+
+app.post('/fetch-filter-profit' , function(req,res) {
+        var { profit } = req.body
+        console.log(req.body)
+
+          knex('items')
+          .select('*')
+          .where('profit' , '<' ,  profit )
+          .orderBy('id' , 'asc')
+          .then(result=>{
+            res.json(result)
+          })
+
+})
+
+
+app.post('/monthly-total' , function(req,res) {
+
+    var date = new Date()
+    date = JSON.stringify(date)
+    console.log(date)
+
+      // var day = date[8] + date[9];
+
+      var date = date.slice(0, 11)
+
+      var monthStart1 = date.slice(0,8)
+      var monthStart = monthStart1 + '-01'
+
+      console.log(monthStart)
+      console.log(date)
+
+
+      knex('sale')
+      .select('sum')
+      .whereBetween(  'date'  , [monthStart , date])
+      .then(result=>{
+          console.log(result)
+          var sum = 0
+        result.forEach((object)=>{
+
+            sum = sum + Number(object.sum)
+
+        })
+
+        res.json(sum)
+      })
+
+
+    })
+
+
+
+app.post('/weekly-total' , function(req,res) {
+
+    var date = new Date();
+    console.log('date')
 
 })
 
