@@ -58,6 +58,7 @@ app.post('/add-item', function (req, res) {
 })
 
 app.post('/table', function(req,res) {
+
     knex('items')
     .select('*')
     .where({name: req.body.name})
@@ -104,8 +105,6 @@ app.post('/sale-item-search', function(req,res) {
 })
 
 app.post('/sale-item-add', function(req,res) {
-
-      knex.transaction(function(trx) {
             var { name , quantity , discount , price } = req.body
 
             knex('items')
@@ -152,10 +151,6 @@ app.post('/sale-item-add', function(req,res) {
                  
 
             })
-            .then(trx.commit)
-            .catch(trx.rollback);
-
-          })
           .catch(err=>console.log(err))
 
 
@@ -174,46 +169,214 @@ app.post('/sale-item-add', function(req,res) {
 })
 
 app.post('/final-sale-add', function(req,res) {
-    const { arr , total } = req.body
-    console.log()
+    
+        var { arr , total } = req.body
 
-        for(var i = 0 ; i < arr.length ; i++ ) {
-             var a = i
-              knex('items')
-              .where({name : arr[i][0]})
-              .select('*')
-              .then(result=>{
-                  var first = Number(result[0].profit)
-                  console.log(a)
+        arr.forEach((saleData , i)=>{
 
-                  var second = Number(arr[a][1])
-                  var totalProfit = first * second
-                  knex('sale')
-                  .insert({
-                    items: arr[a][0],
-                    quantity: arr[a][1],
-                    profit: totalProfit,
-                    discount: arr[a][2],
-                    sum: arr[a][3],
-                    date: new Date()
-                  })
-                  .then( result2=> {
-                    console.log('oj')
-                  })
 
-              })
+          knex.transaction(function(trx) {
 
-        }
-    knex('sale')
-    .insert({
-      sum: total
-    })    
-    .then(result=>{
-      console.log('ok2')
-    })
+
+            return trx('items')
+                  .select('*')
+                  .where({name: saleData[0]})
+                  .then(result1=>{
+
+                          var totalProfit = (Number(saleData[1]) * Number(result1[0].profit) - Number(saleData[2]))
+                  
+                          return trx('sale')
+                          .insert({
+                              items: JSON.stringify(saleData[0]),
+                              quantity: saleData[1],
+                              discount: saleData[2],
+                              profit: totalProfit,
+                              sum: saleData[3],
+                              date: new Date()
+
+                          })
+                          .then(result1=> {
+                            console.log(i)
+                            if( i === arr.length -1 ) {
+                                return trx('sale')
+                                .insert({
+                                total: total
+                                })
+                                .then(result2=>{
+                                    console.log(1)
+                                })
+
+                              }
+                          
+                        })
+                        .then(result3=>{
+
+                        var newQuan = Number(result1[0].quantity) - Number(saleData[1])
+
+
+                          return trx('items')
+                           .where({name: saleData[0]})
+                           .update({quantity : newQuan})
+                           .then(result4=>console.log('updated'))
+
+                       })
+
+                        newQuan = 0
+
+
+                   })
+                   .catch(err=>res.json(err.detail + 'Issue while fetching from items db.'))
+
+       
+                   })
+
+
+
+
+
+      })
+        // .catch(err=>console.log(err.detail + 'Transaction Failed.'))
+
+
+
+
+
+
+
+
+
+
+      //   knex.transaction(function(trx) {
+
+      //           for(var i = 0 ; i < arr.length ; i++ ) {
+      //                var a = i
+      //                 console.log(a)
+      //                 knex('items')
+      //                 .select('*')
+      //                 .where({name : arr[i][0]})
+      //                 .then(result=>{
+      //                     var first = Number(result[0].profit)
+      //                     console.log(a)             
+      //                   var second = Number(arr[a][1])
+      //                     var totalProfit = first * second
+      //                     return trx('sale')
+      //                     .insert({
+      //                       items: arr[a][0],
+      //                       quantity: arr[a][1],
+      //                       profit: totalProfit,
+      //                       discount: arr[a][2],
+      //                       sum: arr[a][3],
+      //                       date: new Date()
+      //                     })
+      //                     .then( result2=> {
+      //                      console.log('ok')
+                              
+      //                     })
+      //                 })
+      //                     .then(trx.commit)
+      //                     .then(trx.rollback)
+
+                      
+      //           }
+
+      // })
+      //   .catch(err=>console.log(err.detail))
+          //  knex('sale')
+          //  .insert({
+          //   sum: total
+          //   })    
+          // .then(result=>{
+          //    console.log('ok2')
+          //   })
+    
+
+    
+  
+    // 
 
 })
 
+app.post('/fetch-all-items' , function(req,res) {
 
+          knex('items')
+          .select('*')
+          .orderBy('id' , 'asc')
+          .then(result=>{
+            console.log(result)
+              res.json(result)
+          })
+
+
+})
+
+app.post('/fetch-all-items-filter' , function(req,res) {
+
+      var { state } = req.body;
+      console.log(state)
+
+       var filteredItems = []
+
+        state.forEach((check , i)=>{
+
+                   var year =  Object.keys(check)[0]
+
+                    if(year === 'after') {
+
+
+                        knex('items')
+                        .select('*')
+                        .where('expiry' , '>', '31-12-2024')
+                        .orderBy('id' , 'asc')
+                        .then(result => {
+
+                       // filteredItems =  JSON.stringify(filteredItems) + JSON.stringify(result)
+                        filteredItems =  filteredItems.concat(result)
+
+                        if( i === state.length - 1 ) {
+
+                         res.json(filteredItems)
+                        }
+                    
+                     })
+
+                    }
+
+                    else {
+                         var sameYear = '31-12-202' + year[4]
+                          var prevYear = '31-12-202' + (Number(year[4]) - 1)
+                          knex('items')
+                          .select('*')
+                          .where('expiry' , '<=', sameYear)
+                          .andWhere('expiry' , '>', prevYear)
+                          .orderBy('id' , 'asc')
+                          .then(result=>{
+                            filteredItems =  filteredItems.concat(result)
+                            
+                            console.log(filteredItems)
+                            if( i === state.length - 1 ) {
+
+                             res.json(filteredItems)
+                            }
+                           
+                             
+                          })
+                    }
+
+
+                  })
+
+})
+
+app.post('/fetch-filter-quan' , function(req,res) {
+        var { quan } = req.body
+        
+          knex('items')
+          .select('*')
+          .where('quantity' , '<' , quan )
+          .then(result=>{
+            res.json(result)
+          })
+
+})
 
 app.listen(3001)
