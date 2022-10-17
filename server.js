@@ -411,20 +411,12 @@ app.post('/fetch-filter-profit' , function(req,res) {
 
 app.post('/monthly-total' , function(req,res) {
 
-    var date = new Date()
-    date = JSON.stringify(date)
-    console.log(date)
+      var date  = req.body.date
 
-      // var day = date[8] + date[9];
-
-      var date = date.slice(0, 11)
-
-      var monthStart1 = date.slice(0,8)
-      var monthStart = monthStart1 + '-01'
-
-      console.log(monthStart)
-      console.log(date)
-
+      var date = date.substring(4, 16)
+      var part1 = date.slice(0,3)
+      var part2 = date.slice(7,11)
+      var monthStart = part1 + ' 01 ' + part2
 
       knex('sale')
       .select('sum')
@@ -444,12 +436,139 @@ app.post('/monthly-total' , function(req,res) {
 
     })
 
-
-
 app.post('/weekly-total' , function(req,res) {
 
-    var date = new Date();
-    console.log('date')
+    var { date } = req.body
+    var weekDay = new Date(date).getDay()
+    var toSub = weekDay-1
+    var weekStartDate = new Date(date).getDate() - toSub
+    console.log(weekStartDate)
+
+    var date = date.substring(4, 16)
+    var part1 = date.slice(0,3)
+    var part2 = date.slice(7,11)
+    var weekStart = part1 + ` ${weekStartDate} ` + part2
+
+    knex('sale')
+    .select('sum')
+    .whereBetween(  'date'  , [weekStart , date])
+    .then(result=>{
+        console.log(result)
+        var sum = 0
+      result.forEach((object)=>{
+
+          sum = sum + Number(object.sum)
+
+      })
+
+      res.json(sum)
+    })
+
+
+})
+
+app.post('/daily-total' , function(req , res) {
+
+      var { date } = req.body;
+
+      var date = date.substring(4, 16)
+
+      knex('sale')
+      .select('sum')
+      .where( 'date' , date)
+      .then(result=>{
+          console.log(result)
+          var sum = 0
+        result.forEach((object)=>{
+
+            sum = sum + Number(object.sum)
+
+        })
+
+        res.json(sum)
+      })
+
+})
+
+app.post('/monthly-profit' , function(req,res) {
+
+      var date  = req.body.date
+
+      var date = date.substring(4, 16)
+      var part1 = date.slice(0,3)
+      var part2 = date.slice(7,11)
+      var monthStart = part1 + ' 01 ' + part2
+
+      knex('sale')
+      .select('profit')
+      .whereBetween(  'date'  , [monthStart , date])
+      .then(result=>{
+          console.log(result)
+          var profit = 0
+        result.forEach((object)=>{
+
+            profit = profit + Number(object.profit)
+
+        })
+
+        console.log(result)
+
+        res.json(profit)
+      })
+
+
+    })
+
+app.post('/weekly-profit' , function(req,res) {
+
+        var { date } = req.body
+        var weekDay = new Date(date).getDay()
+        var toSub = weekDay - 1
+        var weekStartDate = new Date(date).getDate() - toSub
+
+        var date = date.substring(4, 16)
+        var part1 = date.slice(0,3)
+        var part2 = date.slice(7,11)
+        var weekStart = part1 + ` ${weekStartDate} ` + part2
+
+
+        knex('sale')
+        .select('profit')
+        .whereBetween(  'date'  , [weekStart , date])
+        .then(result=>{
+            console.log(result)
+            var profit = 0
+          result.forEach((object)=>{
+
+              profit = profit + Number(object.profit)
+
+          })
+
+          res.json(profit)
+        })
+
+    })
+
+app.post('/daily-profit' , function(req , res) {
+
+          var { date } = req.body;
+
+          var date = date.substring(4, 16)
+
+          knex('sale')
+          .select('profit')
+          .where( 'date' , date)
+          .then(result=>{
+              console.log(result)
+              var profit = 0
+            result.forEach((object)=>{
+
+                profit = profit + Number(object.profit)
+
+            })
+
+            res.json(profit)
+          })
 
 })
 
