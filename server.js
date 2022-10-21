@@ -396,7 +396,7 @@ app.post('/fetch-filter-price' , function(req,res) {
 
 app.post('/fetch-filter-profit' , function(req,res) {
         var { profit } = req.body
-        console.log(req.body)
+
 
           knex('items')
           .select('*')
@@ -422,7 +422,7 @@ app.post('/monthly-total' , function(req,res) {
       .select('sum')
       .whereBetween(  'date'  , [monthStart , date])
       .then(result=>{
-          console.log(result)
+
           var sum = 0
         result.forEach((object)=>{
 
@@ -442,7 +442,7 @@ app.post('/weekly-total' , function(req,res) {
     var weekDay = new Date(date).getDay()
     var toSub = weekDay-1
     var weekStartDate = new Date(date).getDate() - toSub
-    console.log(weekStartDate)
+
 
     var date = date.substring(4, 16)
     var part1 = date.slice(0,3)
@@ -453,7 +453,7 @@ app.post('/weekly-total' , function(req,res) {
     .select('sum')
     .whereBetween(  'date'  , [weekStart , date])
     .then(result=>{
-        console.log(result)
+
         var sum = 0
       result.forEach((object)=>{
 
@@ -477,7 +477,7 @@ app.post('/daily-total' , function(req , res) {
       .select('sum')
       .where( 'date' , date)
       .then(result=>{
-          console.log(result)
+
           var sum = 0
         result.forEach((object)=>{
 
@@ -503,7 +503,7 @@ app.post('/monthly-profit' , function(req,res) {
       .select('profit')
       .whereBetween(  'date'  , [monthStart , date])
       .then(result=>{
-          console.log(result)
+
           var profit = 0
         result.forEach((object)=>{
 
@@ -536,7 +536,7 @@ app.post('/weekly-profit' , function(req,res) {
         .select('profit')
         .whereBetween(  'date'  , [weekStart , date])
         .then(result=>{
-            console.log(result)
+
             var profit = 0
           result.forEach((object)=>{
 
@@ -559,7 +559,7 @@ app.post('/daily-profit' , function(req , res) {
           .select('profit')
           .where( 'date' , date)
           .then(result=>{
-              console.log(result)
+
               var profit = 0
             result.forEach((object)=>{
 
@@ -570,6 +570,104 @@ app.post('/daily-profit' , function(req , res) {
             res.json(profit)
           })
 
+})
+
+
+app.post('/filter-sale-date' , function(req , res) {
+
+      const { date , value } = req.body;
+
+      if( date === 'before' ) {
+
+          knex('sale')
+          .select('*')
+          .where('date' , '<' , value)
+          .orderBy('id' , 'asc')
+          .then(result=>{
+
+
+            res.json(result)
+          })
+
+      } else if( date === 'same' ) {
+
+          knex('sale')
+          .select('*')
+          .where({date: value})
+          .orderBy('id' , 'asc')
+          .then(result=>{
+
+
+            res.json(result)
+          })
+
+      } if( date === 'after' ) {
+
+          knex('sale')
+          .select('*')
+          .where('date' , '>' , value)
+          .orderBy('id' , 'asc')
+          .then(result=>{
+            res.json(result)
+          })
+
+      }
+
+
+
+})
+
+app.post('/filter-sale-item' , function(req , res) {
+
+      var { date , value , item } = req.body
+      console.log(req.body)
+
+
+      var item = JSON.stringify(item)
+
+
+
+        var cutDate = new Date(value)
+        cutDate = cutDate.toString()
+        cutDate = cutDate.slice(3 , 15)
+
+        console.log(value)
+
+
+          if( date === 'before-item' ) {
+
+              knex('sale')
+              .select('*')
+              .where('date' , '<' , value)
+              .andWhere({items: item})
+              .orderBy('id' , 'asc')
+              .then(result => {
+                res.json(result)
+              })
+
+          } else if (date === 'same-item') {
+
+              knex('sale')
+              .select('*')
+              .where({date: value})
+              .andWhere({items: item})
+              .orderBy('id' , 'asc')
+              .then( result => {
+                res.json(result)
+              })
+
+          } else if( date === 'after-item' ) {
+
+              knex('sale')
+              .select('*')
+              .where('date' , '>' , value)
+              .andWhere({items: item})
+              .orderBy('id' , 'asc')
+              .then(result=>{
+                res.json(result)
+              })
+
+          }
 })
 
 app.listen(3001)
