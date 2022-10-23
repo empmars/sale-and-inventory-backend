@@ -575,43 +575,55 @@ app.post('/daily-profit' , function(req , res) {
 
 app.post('/filter-sale-date' , function(req , res) {
 
-      const { date , value } = req.body;
+      var { fromDate , toDate } = req.body.dates;
 
-      if( date === 'before' ) {
+      fromDate = new Date(fromDate)
+      toDate = new Date(toDate)
 
-          knex('sale')
-          .select('*')
-          .where('date' , '<' , value)
-          .orderBy('id' , 'asc')
-          .then(result=>{
+      console.log(req.body)
 
-
-            res.json(result)
-          })
-
-      } else if( date === 'same' ) {
-
-          knex('sale')
-          .select('*')
-          .where({date: value})
-          .orderBy('id' , 'asc')
-          .then(result=>{
-
-
-            res.json(result)
-          })
-
-      } if( date === 'after' ) {
-
-          knex('sale')
-          .select('*')
-          .where('date' , '>' , value)
-          .orderBy('id' , 'asc')
-          .then(result=>{
-            res.json(result)
-          })
-
-      }
+        knex('sale')
+        .select('*')
+        .whereBetween('date', [fromDate , toDate])
+        .orderBy('id' , 'asc')
+        .then(result=>{
+          res.json(result)
+        })
+      // if( date === 'before' ) {
+      //
+      //     knex('sale')
+      //     .select('*')
+      //     .where('date' , '<' , value)
+      //     .orderBy('id' , 'asc')
+      //     .then(result=>{
+      //
+      //
+      //       res.json(result)
+      //     })
+      //
+      // } else if( date === 'same' ) {
+      //
+      //     knex('sale')
+      //     .select('*')
+      //     .where({date: value})
+      //     .orderBy('id' , 'asc')
+      //     .then(result=>{
+      //
+      //
+      //       res.json(result)
+      //     })
+      //
+      // } if( date === 'after' ) {
+      //
+      //     knex('sale')
+      //     .select('*')
+      //     .where('date' , '>' , value)
+      //     .orderBy('id' , 'asc')
+      //     .then(result=>{
+      //       res.json(result)
+      //     })
+      //
+      // }
 
 
 
@@ -619,55 +631,63 @@ app.post('/filter-sale-date' , function(req , res) {
 
 app.post('/filter-sale-item' , function(req , res) {
 
-      var { date , value , item } = req.body
-      console.log(req.body)
-
+      var { item , from , to } = req.body
 
       var item = JSON.stringify(item)
+      var from = JSON.stringify(from)
+      var to = JSON.stringify(to)
 
 
 
-        var cutDate = new Date(value)
-        cutDate = cutDate.toString()
-        cutDate = cutDate.slice(3 , 15)
+      knex('sale')
+      .select('*')
+      .whereBetween('date', [from , to])
+      .andWhere({items: item})
+      .orderBy('id' , 'asc')
+      .then(result=>{
+        res.json(result)
+      })
 
-        console.log(value)
 
 
-          if( date === 'before-item' ) {
-
-              knex('sale')
-              .select('*')
-              .where('date' , '<' , value)
-              .andWhere({items: item})
-              .orderBy('id' , 'asc')
-              .then(result => {
-                res.json(result)
-              })
-
-          } else if (date === 'same-item') {
-
-              knex('sale')
-              .select('*')
-              .where({date: value})
-              .andWhere({items: item})
-              .orderBy('id' , 'asc')
-              .then( result => {
-                res.json(result)
-              })
-
-          } else if( date === 'after-item' ) {
-
-              knex('sale')
-              .select('*')
-              .where('date' , '>' , value)
-              .andWhere({items: item})
-              .orderBy('id' , 'asc')
-              .then(result=>{
-                res.json(result)
-              })
-
-          }
+        //
+        // console.log(value)
+        //
+        //
+        //   if( date === 'before-item' ) {
+        //
+        //       knex('sale')
+        //       .select('*')
+        //       .where('date' , '<' , value)
+        //       .andWhere({items: item})
+        //       .orderBy('id' , 'asc')
+        //       .then(result => {
+        //         res.json(result)
+        //       })
+        //
+        //   } else if (date === 'same-item') {
+        //
+        //       knex('sale')
+        //       .select('*')
+        //       .where({date: value})
+        //       .andWhere({items: item})
+        //       .orderBy('id' , 'asc')
+        //       .then( result => {
+        //         res.json(result)
+        //       })
+        //
+        //   } else if( date === 'after-item' ) {
+        //
+        //       knex('sale')
+        //       .select('*')
+        //       .where('date' , '>' , value)
+        //       .andWhere({items: item})
+        //       .orderBy('id' , 'asc')
+        //       .then(result=>{
+        //         res.json(result)
+        //       })
+        //
+        //   }
 })
 
 app.listen(3001)
