@@ -310,61 +310,67 @@ app.post('/fetch-all-items' , function(req,res) {
 
 })
 
-app.post('/fetch-all-items-filter' , function(req,res) {
+app.post('/filter-items-expiry' , function(req,res) {
 
-      var { state } = req.body;
-      console.log(state)
+      var { from , to } = req.body;
+      knex('items')
+      .select('*')
+      .whereBetween('expiry', [from , to])
+      .orderBy('id' , 'asc')
+      .then(result=>{
+        res.json(result)
+      })
 
-       var filteredItems = []
-
-        state.forEach((check , i)=>{
-
-                   var year =  Object.keys(check)[0]
-
-                    if(year === 'after') {
-
-
-                        knex('items')
-                        .select('*')
-                        .where('expiry' , '>', '31-12-2024')
-                        .orderBy('id' , 'asc')
-                        .then(result => {
-
-                       // filteredItems =  JSON.stringify(filteredItems) + JSON.stringify(result)
-                        filteredItems =  filteredItems.concat(result)
-
-                        if( i === state.length - 1 ) {
-
-                         res.json(filteredItems)
-                        }
-
-                     })
-
-                    }
-
-                    else {
-                         var sameYear = '31-12-202' + year[4]
-                          var prevYear = '31-12-202' + (Number(year[4]) - 1)
-                          knex('items')
-                          .select('*')
-                          .where('expiry' , '<=', sameYear)
-                          .andWhere('expiry' , '>', prevYear)
-                          .orderBy('id' , 'asc')
-                          .then(result=>{
-                            filteredItems =  filteredItems.concat(result)
-
-                            console.log(filteredItems)
-                            if( i === state.length - 1 ) {
-
-                             res.json(filteredItems)
-                            }
-
-
-                          })
-                    }
-
-
-                  })
+       // var filteredItems = []
+       //
+       //  state.forEach((check , i)=>{
+       //
+       //             var year =  Object.keys(check)[0]
+       //
+       //              if(year === 'after') {
+       //
+       //
+       //                  knex('items')
+       //                  .select('*')
+       //                  .where('expiry' , '>', '31-12-2024')
+       //                  .orderBy('id' , 'asc')
+       //                  .then(result => {
+       //
+       //                 // filteredItems =  JSON.stringify(filteredItems) + JSON.stringify(result)
+       //                  filteredItems =  filteredItems.concat(result)
+       //
+       //                  if( i === state.length - 1 ) {
+       //
+       //                   res.json(filteredItems)
+       //                  }
+       //
+       //               })
+       //
+       //              }
+       //
+       //              else {
+       //                   var sameYear = '31-12-202' + year[4]
+       //                    var prevYear = '31-12-202' + (Number(year[4]) - 1)
+       //                    knex('items')
+       //                    .select('*')
+       //                    .where('expiry' , '<=', sameYear)
+       //                    .andWhere('expiry' , '>', prevYear)
+       //                    .orderBy('id' , 'asc')
+       //                    .then(result=>{
+       //                      filteredItems =  filteredItems.concat(result)
+       //
+       //                      console.log(filteredItems)
+       //                      if( i === state.length - 1 ) {
+       //
+       //                       res.json(filteredItems)
+       //                      }
+       //
+       //
+       //                    })
+       //              }
+       //
+       //
+       //            })
 
 })
 
