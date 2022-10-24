@@ -59,20 +59,18 @@ app.post('/add-item', function (req, res) {
 
 app.post('/table', function(req,res) {
 
+  var { name } = req.body;
+  name = name.toLowerCase()
+
     knex('items')
     .select('*')
-    .where({name: req.body.name})
-    .then(result=>{
-      console.log(result.length)
-    if (result.length === 0) {
-        res.json('Item does not exist.')
-    }
-    else {
-        res.json(result[0])
-    }
+    .whereRaw(`LOWER(name) LIKE ?`, [`%${name}%`])
+    .then(result => {
+
+        res.json(result)
+
 
     })
-    .catch(err=>res.json(err.detail))
 
 })
 
@@ -316,7 +314,7 @@ app.post('/filter-items-expiry' , function(req,res) {
       knex('items')
       .select('*')
       .whereBetween('expiry', [from , to])
-      .orderBy('id' , 'asc')
+      .orderBy('expiry' , 'asc')
       .then(result=>{
         res.json(result)
       })
