@@ -23,41 +23,49 @@ app.get('/', function (req, res) {
 })
 
 app.post('/add-item', function (req, res) {
-  console.log(req.body)
           const { name , quantity , price , expiry , profit } = req.body;
 
-          const valuesOfReq = Object.values(req.body);
+          console.log(req.body)
 
-          const checkIfEmpty = (value) =>{
-              return(value !== '')
+          for (let par in req.body) {
+              if(req.body[par].length === 0 && par !== 'expiry') {
+                req.body[par] = '0'
+              }
           }
 
-          const test = valuesOfReq.every(checkIfEmpty)
-
-           if(test) {
-
-                    const profitPerc= (profit/100) * price;
-                    const roundOffprofitPerc = Math.round(profitPerc)
+          const profitPerc= (profit/100) * price;
+          if(expiry.length === 0) {
                     knex('items')
                     .insert({
                       name: name,
-                      quantity : quantity,
-                      price: price,
-                      expiry: expiry,
-                      profit: roundOffprofitPerc
+                      quantity : Number(quantity),
+                      price: Number(price),
+                      expiry: null,
+                      profit: Number(profitPerc)
                     })
                     .then(result=>{
                         res.json('success')
                     })
                     .catch(err=>res.json(err.detail))
-          }
-          else (
-              res.json('Please fill all fields.')
-          )
+              } else {
+                knex('items')
+                .insert({
+                  name: name,
+                  quantity : Number(quantity),
+                  price: Number(price),
+                  expiry: expiry,
+                  profit: Number(profitPerc)
+                })
+                .then(result=>{
+                    res.json('success')
+                })
+                .catch(err=>res.json(err.detail))
 
+
+              }
 })
 
-app.post('/table', function(req,res) {
+app.post('/list-search-edit', function(req,res) {
 
   var { name } = req.body;
   name = name.toLowerCase()
@@ -71,6 +79,66 @@ app.post('/table', function(req,res) {
 
 
     })
+
+})
+
+app.post('/fetch-items-edit', function(req,res){
+
+      const { name } = req.body
+
+      knex('items')
+      .select('*')
+      .where({name: name})
+      .then(result=>{
+
+            res.json(result)
+
+      })
+
+})
+
+app.post('/save-edited-item' , function(req,res) {
+
+    var { quantity , profit , price , expiry } = req.body;
+
+
+
+
+    for (let par in req.body) {
+
+        if(req.body[par].length === 0 && par !== 'expiry') {
+          req.body[par] = '0'
+        }
+    }
+
+    if(expiry.length === 0) {
+
+      knex('items')
+      .update({
+          quantity: Number(quantity),
+          profit: Number(profit),
+          price: Number(price),
+          expiry: null
+        })
+      .then(result=>{
+        res.json('Success')
+    })
+  .catch(()=>{res.json('Error')})
+  }
+    else {
+
+      knex('items')
+      .update({
+          quantity: Number(quantity),
+          profit: Number(profit),
+          price: Number(price),
+          expiry: expiry
+        })
+      .then(result=>{
+        res.json('Success')
+    })
+      .catch(()=>{res.json('Error')})
+    }
 
 })
 
@@ -194,7 +262,7 @@ app.post('/final-sale-add', function(req,res) {
                               total: 0
 
                           })
-                          .then(result1=> {
+                        .then(result1=> {
                             console.log(i)
                             if( i === arr.length -1 ) {
                                 return trx('sale')
@@ -216,7 +284,11 @@ app.post('/final-sale-add', function(req,res) {
                           return trx('items')
                            .where({name: saleData[0]})
                            .update({quantity : newQuan})
-                           .then(result4=>console.log('updated'))
+                           .then(result4=>{
+                             if(i === arr.length -1) {
+                               res.json('Success')
+                             }
+                           })
 
                        })
 
@@ -234,65 +306,6 @@ app.post('/final-sale-add', function(req,res) {
 
 
       })
-        // .catch(err=>console.log(err.detail + 'Transaction Failed.'))
-
-
-
-
-
-
-
-
-
-
-      //   knex.transaction(function(trx) {
-
-      //           for(var i = 0 ; i < arr.length ; i++ ) {
-      //                var a = i
-      //                 console.log(a)
-      //                 knex('items')
-      //                 .select('*')
-      //                 .where({name : arr[i][0]})
-      //                 .then(result=>{
-      //                     var first = Number(result[0].profit)
-      //                     console.log(a)
-      //                   var second = Number(arr[a][1])
-      //                     var totalProfit = first * second
-      //                     return trx('sale')
-      //                     .insert({
-      //                       items: arr[a][0],
-      //                       quantity: arr[a][1],
-      //                       profit: totalProfit,
-      //                       discount: arr[a][2],
-      //                       sum: arr[a][3],
-      //                       date: new Date()
-      //                     })
-      //                     .then( result2=> {
-      //                      console.log('ok')
-
-      //                     })
-      //                 })
-      //                     .then(trx.commit)
-      //                     .then(trx.rollback)
-
-
-      //           }
-
-      // })
-      //   .catch(err=>console.log(err.detail))
-          //  knex('sale')
-          //  .insert({
-          //   sum: total
-          //   })
-          // .then(result=>{
-          //    console.log('ok2')
-          //   })
-
-
-
-
-    //
-
 })
 
 app.post('/fetch-all-items' , function(req,res) {
