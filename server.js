@@ -263,11 +263,11 @@ app.post('/final-sale-add', function(req,res) {
 
                           })
                         .then(result1=> {
-                            console.log(i)
                             if( i === arr.length -1 ) {
                                 return trx('sale')
                                 .insert({
-                                total: total
+                                total: total,
+                                date: new Date()
                                 })
                                 .then(result2=>{
                                     console.log(1)
@@ -279,13 +279,11 @@ app.post('/final-sale-add', function(req,res) {
                         .then(result3=>{
 
                         var newQuan = Number(result1[0].quantity) - Number(saleData[1])
-
-
                           return trx('items')
                            .where({name: saleData[0]})
                            .update({quantity : newQuan})
                            .then(result4=>{
-                             if(i === arr.length -1) {
+                             if(i === arr.length - 1) {
                                res.json('Success')
                              }
                            })
@@ -447,7 +445,9 @@ app.post('/monthly-total' , function(req,res) {
 
         })
 
-        res.json(sum)
+
+
+        res.json(Math.round(sum))
       })
 
 
@@ -478,7 +478,7 @@ app.post('/weekly-total' , function(req,res) {
 
       })
 
-      res.json(sum)
+      res.json(Math.round(sum))
     })
 
 
@@ -502,7 +502,7 @@ app.post('/daily-total' , function(req , res) {
 
         })
 
-        res.json(sum)
+        res.json(Math.round(sum))
       })
 
 })
@@ -528,9 +528,7 @@ app.post('/monthly-profit' , function(req,res) {
 
         })
 
-        console.log(result)
-
-        res.json(profit)
+        res.json(Math.round(profit))
       })
 
 
@@ -561,7 +559,7 @@ app.post('/weekly-profit' , function(req,res) {
 
           })
 
-          res.json(profit)
+          res.json(Math.round(profit))
         })
 
     })
@@ -584,7 +582,7 @@ app.post('/daily-profit' , function(req , res) {
 
             })
 
-            res.json(profit)
+            res.json(Math.round(profit))
           })
 
 })
@@ -597,7 +595,6 @@ app.post('/filter-sale-date' , function(req , res) {
       fromDate = new Date(fromDate)
       toDate = new Date(toDate)
 
-      console.log(req.body)
 
         knex('sale')
         .select('*')
