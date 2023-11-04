@@ -3,6 +3,8 @@ const cors = require('cors')
 const app = express()
 app.use(express.json());
 
+app.use(cors())
+
 const knex = require('knex')({
   client: 'pg',
   version: '7.2',
@@ -16,23 +18,6 @@ const knex = require('knex')({
 
 // CORS FUNCTION
 
-const allowCors = fn => async (req, res) => {
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  // another common pattern
-  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  )
-  if (req.method === 'OPTIONS') {
-    res.status(200).end()
-    return
-  }
-  return await fn(req, res)
-}
-
 
 
 
@@ -43,7 +28,7 @@ app.get('/', function (req, res) {
 })
 
 
-allowCors(app.post('/add-item', function (req, res) {
+app.post('/add-item', function (req, res) {
           const { name , quantity , price , expiry , profit } = req.body;
 
           console.log(req.body)
@@ -84,7 +69,7 @@ allowCors(app.post('/add-item', function (req, res) {
 
 
               }
-}))
+})
 
 app.post('/list-search-edit', function(req,res) {
 
