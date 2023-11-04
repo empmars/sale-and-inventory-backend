@@ -3,7 +3,7 @@ const cors = require('cors')
 const app = express()
 app.use(express.json());
 
-app.use(cors())
+
 
 const knex = require('knex')({
   client: 'pg',
@@ -19,7 +19,11 @@ const knex = require('knex')({
 // CORS FUNCTION
 
 
-
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://sale-an-inventory-front.vercel.app"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 
 app.get('/', function (req, res) {
