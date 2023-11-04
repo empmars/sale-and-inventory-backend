@@ -8,7 +8,6 @@ const knex = require('knex')({
   client: 'pg',
   version: '7.2',
   connection: {
-    host : '127.0.0.1',
     port : 5432,
     user : 'postgres',
     password : 'yoloswag11223',
@@ -704,4 +703,5 @@ app.post('/filter-sale-item' , function(req , res) {
         //   }
 })
 
-app.listen(0)
+const port = process.env.PORT || 3001
+app.listen(port , () => {res.json(`Listening to port ${port}`)})
