@@ -18,11 +18,6 @@ const knex = require('knex')({
 // CORS FUNCTION
 
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://sale-an-inventory-front.vercel.app"); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
 
 
 app.get('/', function (req, res) {
@@ -33,7 +28,7 @@ app.get('/', function (req, res) {
 
 app.post('/add-item', function (req, res) {
           
-
+          res.set('Access-Control-Allow-Origin', '*');
           console.log('req.body')
 
           // for (let par in req.body) {
