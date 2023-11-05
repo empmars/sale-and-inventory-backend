@@ -2,7 +2,10 @@ const express = require('express')
 const app = express()
 app.use(express.json());
 
-npm.use(cors())
+app.use(cors({
+    origin: ['https://sale-an-inventory-front-9xbz2l96s-muhammad-samis-projects.vercel.app'],
+    credentials: true
+}));
 app.options('*', cors())
 
 const knex = require('knex')({
