@@ -1,9 +1,7 @@
 const express = require('express')
 const app = express()
-var cors = require('cors')
 
 app.use(express.json());
-app.use(cors())
 
 // const knex = require('knex')({
 //   client: 'pg',
@@ -21,9 +19,13 @@ app.use(cors())
 
 
 
-app.get('/as', function (req, res) {
+app.get('/', function (req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
+  res.setHeader('Access-Control-Allow-Credentials', true);
   console.log('request recieved')
-  res.json({mes : "asas"})
+  res.json({ mes: "asas" })
 })
 
 
