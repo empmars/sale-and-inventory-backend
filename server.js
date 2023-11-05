@@ -21,7 +21,7 @@ app.use(cors())
 
 
 
-app.use('/', function (req, res) {
+app.get('/as', function (req, res) {
   console.log('request recieved')
   res.json("asas")
 })
