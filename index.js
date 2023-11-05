@@ -17,59 +17,61 @@ app.use(express.json());
 // CORS FUNCTION
 
 
-
-
-app.get('/as', function (req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+var headers = () => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
   res.setHeader('Access-Control-Allow-Credentials', true);
+} 
+
+app.get('/as', function (req, res) {
+  headers()
   console.log('request recieved')
   res.json({ mes: "asas" })
 })
 
 
-// app.post('/add-item', function (req, res) {
-          
-//           console.log('req.body')
+app.post('/add-item', function (req, res) {
+  headers()
+   console.log('req.body')
 
-//           // for (let par in req.body) {
-//           //     if(req.body[par].length === 0 && par !== 'expiry') {
-//           //       req.body[par] = '0'
-//           //     }
-//           // }
+for (let par in req.body) {
+    if(req.body[par].length === 0 && par !== 'expiry') {
+      req.body[par] = '0'
+    }
+}
 
-//           // const profitPerc= (profit/100) * price;
-//           // if(expiry.length === 0) {
-//           //           knex('items')
-//           //           .insert({
-//           //             name: name,
-//           //             quantity : Number(quantity),
-//           //             price: Number(price),
-//           //             expiry: null,
-//           //             profit: Number(profitPerc)
-//           //           })
-//           //           .then(result=>{
-//           //               res.json('success')
-//           //           })
-//           //           .catch(err=>res.json(err.detail))
-//           //     } else {
-//           //       knex('items')
-//           //       .insert({
-//           //         name: name,
-//           //         quantity : Number(quantity),
-//           //         price: Number(price),
-//           //         expiry: expiry,
-//           //         profit: Number(profitPerc)
-//           //       })
-//           //       .then(result=>{
-//           //           res.json('success')
-//           //       })
-//           //       .catch(err=>res.json(err.detail))
+const profitPerc= (profit/100) * price;
+if(expiry.length === 0) {
+          knex('items')
+          .insert({
+            name: name,
+            quantity : Number(quantity),
+            price: Number(price),
+           expiry: null,
+            profit: Number(profitPerc)
+           })
+           .then(result=>{
+               res.json('success')
+           })
+           .catch(err=>res.json(err.detail))
+     } else {
+       knex('items')
+       .insert({
+         name: name,
+         quantity : Number(quantity),
+         price: Number(price),
+         expiry: expiry,
+         profit: Number(profitPerc)
+      })
+       .then(result=>{
+           res.json('success')
+      })
+       .catch(err=>res.json(err.detail))
 
 
-//           //     }
-// })
+     }
+})
 
 // app.post('/list-search-edit', function(req,res) {
 
