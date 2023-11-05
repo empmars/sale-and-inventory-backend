@@ -3,7 +3,7 @@ const app = express()
 app.use(express.json());
 
 app.use(cors({
-    origin: ['https://sale-an-inventory-front-9xbz2l96s-muhammad-samis-projects.vercel.app'],
+    origin: ['https://sale-an-inventory-front.vercel.app'],
     credentials: true
 }));
 app.options('*', cors())
