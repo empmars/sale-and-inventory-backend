@@ -23,7 +23,7 @@ const knex = require('knex')({
 
 
 
-app.get('/', function (req, res) {
+app.get('/as', function (req, res) {
   console.log('request recieved')
   res.json('Hello World')
 })
