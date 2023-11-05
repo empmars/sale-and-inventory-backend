@@ -23,7 +23,7 @@ app.use(cors())
 
 app.get('/as', function (req, res) {
   console.log('request recieved')
-  res.json("asas")
+  res.json({mes : "asas"})
 })
 
 
