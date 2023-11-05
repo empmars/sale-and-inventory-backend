@@ -4,7 +4,6 @@ var cors = require('cors')
 
 app.use(express.json());
 
-app.use(cors());
 app.options('*', cors())
 
 const knex = require('knex')({
@@ -23,7 +22,7 @@ const knex = require('knex')({
 
 
 
-app.get('/as', function (req, res) {
+app.get('/', function (req, res) {
   console.log('request recieved')
   res.json('Hello World')
 })
