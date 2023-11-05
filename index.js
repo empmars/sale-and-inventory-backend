@@ -711,4 +711,4 @@ app.get('/as', function (req, res) {
 // })
 
 
-app.listen('*', () => {console.log(`Listening to port ${port}`)})
+app.listen(0, () => {console.log(`Listening to port ${port}`)})
