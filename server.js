@@ -23,7 +23,7 @@ app.use(cors())
 
 app.use('/', function (req, res) {
   console.log('request recieved')
-  res.json('Hello World')
+
 })
 
 
