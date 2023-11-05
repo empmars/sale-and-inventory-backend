@@ -710,5 +710,5 @@ app.get('/as', function (req, res) {
 //         //   }
 // })
 
-// const port = process.env.PORT || 3001
-// app.listen(port , () => {console.log(`Listening to port ${port}`)})
+
+app.listen('*', () => {console.log(`Listening to port ${port}`)})
