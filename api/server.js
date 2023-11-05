@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+var cors = require('cors')
+
 app.use(express.json());
 
 app.use(cors());
@@ -709,4 +711,4 @@ app.post('/filter-sale-item' , function(req , res) {
 })
 
 const port = process.env.PORT || 3001
-app.listen(port , () => {res.json(`Listening to port ${port}`)})
+app.listen(port , () => {console.log(`Listening to port ${port}`)})
