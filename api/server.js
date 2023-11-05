@@ -2,7 +2,8 @@ const express = require('express')
 const app = express()
 app.use(express.json());
 
-
+npm.use(cors())
+app.options('*', cors())
 
 const knex = require('knex')({
   client: 'pg',
@@ -28,7 +29,6 @@ app.get('/', function (req, res) {
 
 app.post('/add-item', function (req, res) {
           
-          res.set('Access-Control-Allow-Origin', '*');
           console.log('req.body')
 
           // for (let par in req.body) {
