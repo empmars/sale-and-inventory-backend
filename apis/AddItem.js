@@ -1,17 +1,12 @@
+import { sql, db } from '@vercel/postgres'
 
-function AddItem(req , res , headers) {
-    
+async function AddItem(req , res , headers) {
+    var client = db.connect()
 
 
     console.log(req.body)
-
-
-    //   for (let par in req.body) {
-    //     if (req.body[par].length === 0 && par !== 'expiry') {
-    //       req.body[par] = '0'
-    //     }
-    //   }
-
+    var items = await client.sql`SELECT * from items`    
+    console.log(items.rows[0])
     //   const profitPerc = (profit / 100) * price;
     //   if (expiry.length === 0) {
     //     knex('items')
