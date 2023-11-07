@@ -3,6 +3,7 @@ import cors from 'cors'
 import { sql, db } from '@vercel/postgres'
 import dotenv from 'dotenv'
 import AddItem from './apis/AddItem.js'
+import getItemSearch from './apis/GetItemSearch.js'
 
 
 
@@ -12,23 +13,12 @@ app.use(express.json());
 app.use(cors())
 dotenv.config()
 
-
-// async function createTable() {
-//       var client = await db.connect()
-
-//       await client.sql`INSERT INTO items (name , quantity , price , profit , expiry) VALUES ('bat' , 1 , 1000 , 200 , '2024-10-09')`
-//       var names = await client.sql`SELECT * from items`
-//       console.log(names.rows[0])
-// }
-// createTable()
-
 var headers = (res) => {
       res.setHeader('Access-Control-Allow-Origin', 'https://sale-an-inventory-front-5jyena2pr-muhammad-samis-projects.vercel.app/');
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
       res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
       res.setHeader('Access-Control-Allow-Credentials', true);
 }
-
 
 app.get('/as', function (req, res) {
       headers(res)
@@ -37,27 +27,16 @@ app.get('/as', function (req, res) {
 
 app.post('/add-item', function (req, res) {
 
-      AddItem(req , res , headers)
+      AddItem(req, res, headers)
 
 })
 
 
-// app.post('/list-search-edit', function(req,res) {
+app.post('/list-search-edit', function (req, res) {
 
-//   var { name } = req.body;
-//   name = name.toLowerCase()
+      getItemSearch(req, res, headers)
 
-//     knex('items')
-//     .select('*')
-//     .whereRaw(`LOWER(name) LIKE ?`, [`%${name}%`])
-//     .then(result => {
-
-//         res.json(result)
-
-
-//     })
-
-// })
+})
 
 // app.post('/fetch-items-edit', function(req,res){
 
