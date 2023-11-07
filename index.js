@@ -1,21 +1,21 @@
-const express = require('express')
+import express from 'express'
+import cors from 'cors'
+import { sql , db} from  '@vercel/postgres'
+import dotenv from 'dotenv'
 const app = express()
-const cors = require('cors')
 app.use(express.json());
 app.use(cors())
-// const knex = require('knex')({
-//   client: 'pg',
-//   version: '7.2',
-//   connection: {
-//     port : 5432,
-//     user : 'postgres',
-//     password : 'yoloswag11223',
-//     database : 'sale-and-inventory-db'
-//   }
-// });
+ dotenv.config()
 
-// CORS FUNCTION
 
+// async function createTable() {
+//       var client = await db.connect()
+
+//       await client.sql`INSERT INTO items (name , quantity , price , profit , expiry) VALUES ('bat' , 1 , 1000 , 200 , '2024-10-09')`
+//       var names = await client.sql`SELECT * from items`
+//       console.log(names.rows[0])
+// }
+// createTable()
 
 var headers = (res) => {
   res.setHeader('Access-Control-Allow-Origin', 'https://sale-an-inventory-front-5jyena2pr-muhammad-samis-projects.vercel.app/');
@@ -24,53 +24,54 @@ var headers = (res) => {
   res.setHeader('Access-Control-Allow-Credentials', true);
 }
 
+
 app.get('/as', function (req, res) {
   headers(res)
-  console.log('request recieved')
   res.json({ mes: "asas" })
 })
 
 
 app.post('/add-item', function (req, res) {
   headers(res)
-  console.log('req.body')
-
-  // for (let par in req.body) {
-  //   if (req.body[par].length === 0 && par !== 'expiry') {
-  //     req.body[par] = '0'
-  //   }
-  // }
-
-  // const profitPerc = (profit / 100) * price;
-  // if (expiry.length === 0) {
-  //   knex('items')
-  //     .insert({
-  //       name: name,
-  //       quantity: Number(quantity),
-  //       price: Number(price),
-  //       expiry: null,
-  //       profit: Number(profitPerc)
-  //     })
-  //     .then(result => {
-  //       res.json('success')
-  //     })
-  //     .catch(err => res.json(err.detail))
-  // } else {
-  //   knex('items')
-  //     .insert({
-  //       name: name,
-  //       quantity: Number(quantity),
-  //       price: Number(price),
-  //       expiry: expiry,
-  //       profit: Number(profitPerc)
-  //     })
-  //     .then(result => {
-  //       res.json('success')
-  //     })
-  //     .catch(err => res.json(err.detail))
+  console.log(req.body)
 
 
-  // }
+//   for (let par in req.body) {
+//     if (req.body[par].length === 0 && par !== 'expiry') {
+//       req.body[par] = '0'
+//     }
+//   }
+
+//   const profitPerc = (profit / 100) * price;
+//   if (expiry.length === 0) {
+//     knex('items')
+//       .insert({
+//         name: name,
+//         quantity: Number(quantity),
+//         price: Number(price),
+//         expiry: null,
+//         profit: Number(profitPerc)
+//       })
+//       .then(result => {
+//         res.json('success')
+//       })
+//       .catch(err => res.json(err.detail))
+//   } else {
+//     knex('items')
+//       .insert({
+//         name: name,
+//         quantity: Number(quantity),
+//         price: Number(price),
+//         expiry: expiry,
+//         profit: Number(profitPerc)
+//       })
+//       .then(result => {
+//         res.json('success')
+//       })
+//       .catch(err => res.json(err.detail))
+
+
+//   }
 })
 
 // app.post('/list-search-edit', function(req,res) {
