@@ -3,73 +3,72 @@ import { db, sql } from '@vercel/postgres'
 async function AddItem(req, res, headers) {
     var client = await db.connect()
 
-    var { name, price, profit, quantity, expiry } = res
+    var { name, price, profit, quantity, expiry } = req
 
     const profitPerc = (profit / 100) * price;
     quantity = Number(quantity)
-    console.log(name, price, profit, quantity, expiry)
-//    if (expiry.length === 0) {
+   if (expiry.length === 0) {
 
-//         try {
+        try {
 
-//             await client.sql`INSERT INTO items (name , quantity , price , profit , expiry) VALUES (${name} , ${quantity} , ${price} , ${profit} , ${null})`
-//             res.json('success')
+            await client.sql`INSERT INTO items (name , quantity , price , profit , expiry) VALUES (${name} , ${quantity} , ${price} , ${profit} , ${null})`
+            res.json('success')
 
 
-//         } catch (err) {
-//             res.json(err.detail)
-//         }
-
+        } catch (err) {
+            res.json(err.detail)
+        }
 
 
 
-//         //     knex('items')
-//         //       .insert({
-//         //         name: name,
-//         //         quantity: Number(quantity),
-//         //         price: Number(price),
-//         //         expiry: null,
+
+        //     knex('items')
+        //       .insert({
+        //         name: name,
+        //         quantity: Number(quantity),
+        //         price: Number(price),
+        //         expiry: null,
 
 
-//         //         profit: Number(profitPerc)
-//         //       })
-//         //       .then(result => {
-//         //         res.json('success')
-//         //       })
-//         //       .catch(err => res.json(err.detail))
-//     } else {
+        //         profit: Number(profitPerc)
+        //       })
+        //       .then(result => {
+        //         res.json('success')
+        //       })
+        //       .catch(err => res.json(err.detail))
+    } else {
 
-//         try {
+        try {
 
-//             await client.sql`INSERT INTO items (name , quantity , price , profit , expiry) VALUES (${name} , ${quantity} , ${price} , ${profit} , ${expiry})`
-//             res.json('success')
+            await client.sql`INSERT INTO items (name , quantity , price , profit , expiry) VALUES (${name} , ${quantity} , ${price} , ${profit} , ${expiry})`
+            res.json('success')
 
 
-//         } catch (err) {
-//             res.json(err.detail)
-//         }
-
+        } catch (err) {
+            res.json(err.detail)
+        }
 
 
 
 
 
 
-//         //     knex('items')
-//         //       .insert({
-//         //         name: name,
-//         //         quantity: Number(quantity),
-//         //         price: Number(price),
-//         //         expiry: expiry,
-//         //         profit: Number(profitPerc)
-//         //       })
-//         //       .then(result => {
-//         //         res.json('success')
-//         //       })
-//         //       .catch(err => res.json(err.detail))
+
+        //     knex('items')
+        //       .insert({
+        //         name: name,
+        //         quantity: Number(quantity),
+        //         price: Number(price),
+        //         expiry: expiry,
+        //         profit: Number(profitPerc)
+        //       })
+        //       .then(result => {
+        //         res.json('success')
+        //       })
+        //       .catch(err => res.json(err.detail))
 
 
-//     }
+    }
 
 
 }
