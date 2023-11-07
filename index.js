@@ -1,11 +1,16 @@
 import express from 'express'
 import cors from 'cors'
-import { sql , db} from  '@vercel/postgres'
+import { sql, db } from '@vercel/postgres'
 import dotenv from 'dotenv'
+import AddItem from './apis/AddItem.js'
+
+
+
+
 const app = express()
 app.use(express.json());
 app.use(cors())
- dotenv.config()
+dotenv.config()
 
 
 // async function createTable() {
@@ -18,61 +23,24 @@ app.use(cors())
 // createTable()
 
 var headers = (res) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://sale-an-inventory-front-5jyena2pr-muhammad-samis-projects.vercel.app/');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', true);
+      res.setHeader('Access-Control-Allow-Origin', 'https://sale-an-inventory-front-5jyena2pr-muhammad-samis-projects.vercel.app/');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+      res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
+      res.setHeader('Access-Control-Allow-Credentials', true);
 }
 
 
 app.get('/as', function (req, res) {
-  headers(res)
-  res.json({ mes: "asas" })
+      headers(res)
+      res.json({ mes: "asas" })
 })
-
 
 app.post('/add-item', function (req, res) {
-  headers(res)
-  console.log(req.body)
 
+      AddItem(req , res , headers)
 
-//   for (let par in req.body) {
-//     if (req.body[par].length === 0 && par !== 'expiry') {
-//       req.body[par] = '0'
-//     }
-//   }
-
-//   const profitPerc = (profit / 100) * price;
-//   if (expiry.length === 0) {
-//     knex('items')
-//       .insert({
-//         name: name,
-//         quantity: Number(quantity),
-//         price: Number(price),
-//         expiry: null,
-//         profit: Number(profitPerc)
-//       })
-//       .then(result => {
-//         res.json('success')
-//       })
-//       .catch(err => res.json(err.detail))
-//   } else {
-//     knex('items')
-//       .insert({
-//         name: name,
-//         quantity: Number(quantity),
-//         price: Number(price),
-//         expiry: expiry,
-//         profit: Number(profitPerc)
-//       })
-//       .then(result => {
-//         res.json('success')
-//       })
-//       .catch(err => res.json(err.detail))
-
-
-//   }
 })
+
 
 // app.post('/list-search-edit', function(req,res) {
 
