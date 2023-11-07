@@ -1,10 +1,10 @@
-import { sql, db } from '@vercel/postgres'
+import { db  , sql} from '@vercel/postgres'
 
 async function AddItem(req , res , headers) {
-    var client = db.connect()
+    var client = await db.connect()
 
 
-    var items = await sql`SELECT * from items`    
+    var items =  await client.sql`SELECT * from items`    
     console.log(items)
     //   const profitPerc = (profit / 100) * price;
     //   if (expiry.length === 0) {
