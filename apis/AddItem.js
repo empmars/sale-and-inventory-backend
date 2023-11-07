@@ -2,7 +2,7 @@
 function AddItem(req , res , headers) {
     
 
-    headers(res)
+
     console.log(req.body)
 
 
