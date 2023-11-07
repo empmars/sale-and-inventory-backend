@@ -5,7 +5,7 @@ async function AddItem(req , res , headers) {
 
 
     var items = await client.sql`SELECT * from items`    
-    console.log(itemsas)
+    console.log(items)
     //   const profitPerc = (profit / 100) * price;
     //   if (expiry.length === 0) {
     //     knex('items')
