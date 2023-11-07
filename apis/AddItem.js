@@ -7,12 +7,12 @@ async function AddItem(req, res, headers) {
 
     const profitPerc = (profit / 100) * price;
     quantity = Number(quantity)
- 
+    console.log(req.body)
    if (expiry.length === 0) {
 
         try {
 
-            await client.sql`INSERT INTO items (name , quantity , price , profit , expiry) VALUES (${name} , ${quantity} , ${price} , ${profit} , ${null})`
+            await client.sql`INSERT INTO items (name , quantity , price , profit , expiry) VALUES (${name} , ${quantity} , ${price} , ${profitPerc} , ${null})`
             res.json('success')
 
 
@@ -20,54 +20,17 @@ async function AddItem(req, res, headers) {
             res.json(err.detail)
         }
 
-
-
-
-        //     knex('items')
-        //       .insert({
-        //         name: name,
-        //         quantity: Number(quantity),
-        //         price: Number(price),
-        //         expiry: null,
-
-
-        //         profit: Number(profitPerc)
-        //       })
-        //       .then(result => {
-        //         res.json('success')
-        //       })
-        //       .catch(err => res.json(err.detail))
     } else {
 
         try {
 
-            await client.sql`INSERT INTO items (name , quantity , price , profit , expiry) VALUES (${name} , ${quantity} , ${price} , ${profit} , ${expiry})`
+            await client.sql`INSERT INTO items (name , quantity , price , profit , expiry) VALUES (${name} , ${quantity} , ${price} , ${profitPerc} , ${expiry})`
             res.json('success')
 
 
         } catch (err) {
             res.json(err.detail)
         }
-
-
-
-
-
-
-
-        //     knex('items')
-        //       .insert({
-        //         name: name,
-        //         quantity: Number(quantity),
-        //         price: Number(price),
-        //         expiry: expiry,
-        //         profit: Number(profitPerc)
-        //       })
-        //       .then(result => {
-        //         res.json('success')
-        //       })
-        //       .catch(err => res.json(err.detail))
-
 
     }
 
