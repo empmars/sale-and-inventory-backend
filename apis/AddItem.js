@@ -4,7 +4,6 @@ async function AddItem(req , res , headers) {
     var client = db.connect()
 
 
-    console.log(req.body)
     var items = await client.sql`SELECT * from items`    
     console.log(items.rows[0])
     //   const profitPerc = (profit / 100) * price;
