@@ -7,7 +7,7 @@ async function AddItem(req, res, headers) {
 
     const profitPerc = (profit / 100) * price;
     quantity = Number(quantity)
-    console.log(req.body)
+    console.log(profitPerc)
    if (expiry.length === 0) {
 
         try {
