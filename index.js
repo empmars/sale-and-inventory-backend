@@ -38,20 +38,7 @@ app.post('/list-search-edit', function (req, res) {
 
 })
 
-// app.post('/fetch-items-edit', function(req,res){
 
-//       const { name } = req.body
-
-//       knex('items')
-//       .select('*')
-//       .where({name: name})
-//       .then(result=>{
-
-//             res.json(result)
-
-//       })
-
-// })
 
 // app.post('/save-edited-item' , function(req,res) {
 
