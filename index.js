@@ -10,6 +10,7 @@ import getItemSearch from './apis/GetItemSearch.js'
 
 const app = express()
 app.use(express.json());
+
 dotenv.config()
 
 var headers = (res) => {
@@ -25,7 +26,7 @@ app.get('/as', function (req, res) {
 })
 
 app.post('/add-item', function (req, res) {
-      
+      headers(resa)
       AddItem(req, res, headers)
 
 })
