@@ -14,7 +14,7 @@ app.use(cors())
 dotenv.config()
 
 var headers = (res) => {
-      res.setHeader('Access-Control-Allow-Origin', 'https://sale-an-inventory-front-5jyena2pr-muhammad-samis-projects.vercel.app/');
+      res.setHeader('Access-Control-Allow-Origin', 'https://sale-an-inventory-front.vercel.app/');
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
       res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
       res.setHeader('Access-Control-Allow-Credentials', true);
