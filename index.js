@@ -24,20 +24,20 @@ var headers = (res) => {
 }
 
 app.get('/as', function (req, res) {
-      headers(res)
+
       res.json({ mes: "asas" })
 })
 
 app.post('/add-item', function (req, res) {
 
-      AddItem(req, res, headers)
+      AddItem(req, res, )
 
 })
 
 
 app.post('/list-search-edit', function (req, res) {
-      headers(res)
-      getItemSearch(req, res, headers)
+     
+      getItemSearch(req, res, )
 
 })
 
