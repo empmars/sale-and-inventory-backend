@@ -6,11 +6,14 @@ import AddItem from './apis/AddItem.js'
 import getItemSearch from './apis/GetItemSearch.js'
 
 
-
+var corsOptions = {
+  origin: 'https://sale-an-inventory-front.vercel.app',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
 
 const app = express()
 app.use(express.json());
-app.use(cors())
+app.use(cors(corsOptions))
 dotenv.config()
 
 var headers = (res) => {
