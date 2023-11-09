@@ -5,11 +5,11 @@ async function AddItem(req, res, headers) {
 
     var { name, price, profit, quantity, expiry } = req.body
 
+    profit = profit >= 0 ? Number(profit) : 0
     const profitPerc = (profit / 100) * price;
     quantity = quantity >= 0 ? Number(quantity) : 0
     price = price >= 0 ? Number(price) : 0
-    profit = profit >= 0 ? Number(profit) : 0
-    
+
     console.log(profitPerc)
    if (expiry.length === 0) {
 
