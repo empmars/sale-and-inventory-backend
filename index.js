@@ -10,7 +10,6 @@ import getItemSearch from './apis/GetItemSearch.js'
 
 const app = express()
 app.use(express.json());
-app.use(cors())
 dotenv.config()
 
 var headers = (res) => {
@@ -26,14 +25,14 @@ app.get('/as', function (req, res) {
 })
 
 app.post('/add-item', function (req, res) {
-
+      
       AddItem(req, res, headers)
 
 })
 
 
 app.post('/list-search-edit', function (req, res) {
-
+      headers(res)
       getItemSearch(req, res, headers)
 
 })
