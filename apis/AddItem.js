@@ -17,7 +17,7 @@ async function AddItem(req, res, headers) {
 
 
         } catch (err) {
-            res.json(err.detail)
+            res.json(err)
         }
 
     } else {

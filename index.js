@@ -30,14 +30,14 @@ app.get('/as', function (req, res) {
 
 app.post('/add-item', function (req, res) {
 
-      AddItem(req, res, )
+      AddItem(req, res)
 
 })
 
 
 app.post('/list-search-edit', function (req, res) {
      
-      getItemSearch(req, res, )
+      getItemSearch(req, res)
 
 })
 
