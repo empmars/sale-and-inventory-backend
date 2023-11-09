@@ -26,7 +26,7 @@ app.get('/as', function (req, res) {
 })
 
 app.post('/add-item', function (req, res) {
-      headers(resa)
+      headers(res)
       AddItem(req, res, headers)
 
 })
