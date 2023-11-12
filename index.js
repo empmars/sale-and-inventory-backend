@@ -4,10 +4,15 @@ import { sql, db } from '@vercel/postgres'
 import dotenv from 'dotenv'
 import AddItem from './apis/AddItem.js'
 import getItemSearch from './apis/GetItemSearch.js'
-
+import { FilterExpiry } from './apis/FilterExpiry.js'
+import { FilterQuan } from './apis/FilterQuan.js'
+import { FilterPrice } from './apis/FilterPrice.js'
+import { FilterPofit } from './apis/FilterProfit.js'
+import { GetAllItems } from './apis/GetAllItems.js'
+import { CheckEditItem } from './apis/CheckEditItem.js'
 
 var corsOptions = {
-  origin: 'https://sale-an-inventory-front.vercel.app',
+  origin: 'http://localhost:3000',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
@@ -17,7 +22,7 @@ app.use(cors(corsOptions))
 dotenv.config()
 
 var headers = (res) => {
-      res.setHeader('Access-Control-Allow-Origin', 'https://sale-an-inventory-front.vercel.app/');
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
       res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
       res.setHeader('Access-Control-Allow-Credentials', true);
@@ -38,10 +43,45 @@ app.post('/add-item', function (req, res) {
 app.post('/list-search-edit', function (req, res) {
      
       getItemSearch(req, res)
+})
+
+app.post('/filter-items-expiry' , function(req,res) {
+
+      FilterExpiry(req , res)
+
 
 })
 
+app.post('/fetch-filter-quan' , function(req,res) {
+      
 
+        FilterQuan(req , res)
+
+})
+
+app.post('/fetch-filter-price' , function(req,res) {
+     
+
+        FilterPrice(req , res)
+
+})
+
+app.post('/fetch-filter-profit' , function(req,res) {
+     
+
+        FilterPofit(req , res)
+
+})
+
+app.post('/fetch-all-items' , function(req,res) {
+
+      GetAllItems(req , res)
+
+})
+
+app.post('/check-item-edit' , function(req, res) {
+      CheckEditItem(req , res)
+})
 
 // app.post('/save-edited-item' , function(req,res) {
 
@@ -265,69 +305,7 @@ app.post('/list-search-edit', function (req, res) {
 
 // })
 
-// app.post('/filter-items-expiry' , function(req,res) {
 
-//       var { from , to } = req.body;
-//       knex('items')
-//       .select('*')
-//       .whereBetween('expiry', [from , to])
-//       .orderBy('expiry' , 'asc')
-//       .then(result=>{
-//         res.json(result)
-//       })
-
-//        // var filteredItems = []
-//        //
-//        //  state.forEach((check , i)=>{
-//        //
-//        //             var year =  Object.keys(check)[0]
-//        //
-//        //              if(year === 'after') {
-//        //
-//        //
-//        //                  knex('items')
-//        //                  .select('*')
-//        //                  .where('expiry' , '>', '31-12-2024')
-//        //                  .orderBy('id' , 'asc')
-//        //                  .then(result => {
-//        //
-//        //                 // filteredItems =  JSON.stringify(filteredItems) + JSON.stringify(result)
-//        //                  filteredItems =  filteredItems.concat(result)
-//        //
-//        //                  if( i === state.length - 1 ) {
-//        //
-//        //                   res.json(filteredItems)
-//        //                  }
-//        //
-//        //               })
-//        //
-//        //              }
-//        //
-//        //              else {
-//        //                   var sameYear = '31-12-202' + year[4]
-//        //                    var prevYear = '31-12-202' + (Number(year[4]) - 1)
-//        //                    knex('items')
-//        //                    .select('*')
-//        //                    .where('expiry' , '<=', sameYear)
-//        //                    .andWhere('expiry' , '>', prevYear)
-//        //                    .orderBy('id' , 'asc')
-//        //                    .then(result=>{
-//        //                      filteredItems =  filteredItems.concat(result)
-//        //
-//        //                      console.log(filteredItems)
-//        //                      if( i === state.length - 1 ) {
-//        //
-//        //                       res.json(filteredItems)
-//        //                      }
-//        //
-//        //
-//        //                    })
-//        //              }
-//        //
-//        //
-//        //            })
-
-// })
 
 // app.post('/fetch-filter-quan' , function(req,res) {
 //         var { quan } = req.body

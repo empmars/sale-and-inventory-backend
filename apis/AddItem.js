@@ -20,6 +20,7 @@ async function AddItem(req, res, headers) {
 
 
         } catch (err) {
+           console.log(err)
            res.json(err)
         }
 
