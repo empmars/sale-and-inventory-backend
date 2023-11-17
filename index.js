@@ -10,6 +10,7 @@ import { FilterPrice } from './apis/FilterPrice.js'
 import { FilterPofit } from './apis/FilterProfit.js'
 import { GetAllItems } from './apis/GetAllItems.js'
 import { CheckEditItem } from './apis/CheckEditItem.js'
+import { EditItem } from './apis/EditItem.js'
 
 var corsOptions = {
   origin: 'http://localhost:3000',
@@ -81,6 +82,10 @@ app.post('/fetch-all-items' , function(req,res) {
 
 app.post('/check-item-edit' , function(req, res) {
       CheckEditItem(req , res)
+})
+
+app.post('/edit-item' , function(req, res) {
+      EditItem(req , res)
 })
 
 // app.post('/save-edited-item' , function(req,res) {
