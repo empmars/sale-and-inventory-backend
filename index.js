@@ -11,6 +11,7 @@ import { FilterPofit } from './apis/FilterProfit.js'
 import { GetAllItems } from './apis/GetAllItems.js'
 import { CheckEditItem } from './apis/CheckEditItem.js'
 import { EditItem } from './apis/EditItem.js'
+import { SaleItemAdd } from './apis/SaleItemAdd.js'
 
 var corsOptions = {
   origin: 'http://localhost:3000',
@@ -88,6 +89,9 @@ app.post('/edit-item' , function(req, res) {
       EditItem(req , res)
 })
 
+app.post('/sale-item-add' , function(req, res) {
+      SaleItemAdd(req , res)
+})
 // app.post('/save-edited-item' , function(req,res) {
 
 //     var { quantity , profit , price , expiry } = req.body;
