@@ -12,6 +12,7 @@ import { GetAllItems } from './apis/GetAllItems.js'
 import { CheckEditItem } from './apis/CheckEditItem.js'
 import { EditItem } from './apis/EditItem.js'
 import { SaleItemAdd } from './apis/SaleItemAdd.js'
+import {FinalSaleAdd} from './apis/FinalSaleAdd.js'
 
 var corsOptions = {
   origin: 'http://localhost:3000',
@@ -91,6 +92,10 @@ app.post('/edit-item' , function(req, res) {
 
 app.post('/sale-item-add' , function(req, res) {
       SaleItemAdd(req , res)
+})
+
+app.post('/final-sale-add' , function(req , res) {
+      FinalSaleAdd(req , res)
 })
 // app.post('/save-edited-item' , function(req,res) {
 

@@ -10,7 +10,7 @@ export async function EditItem(req, res) {
 
         for (var key in request) {
             if (request.hasOwnProperty(key) && request[key].length === 0 || request[key] == 0) {
-                request[key] = null
+                request[key] = 0
             }
         }
 
