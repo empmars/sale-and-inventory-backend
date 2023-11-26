@@ -7,8 +7,8 @@ export default async function getItemSearch(req, res) {
         var client = await db.connect()
 
         var { name } = req.body;
-        name = name.toLowerCase()
-        var result = await client.sql`SELECT * FROM items WHERE LOWER(name) = ${name}`
+        var request = '%' + req.body.name + '%'
+        var result = await client.sql`SELECT * FROM items WHERE name = ${request}`
         res.json(result.rows)
     } catch (err) {
         res.json(err)

@@ -13,6 +13,7 @@ import { CheckEditItem } from './apis/CheckEditItem.js'
 import { EditItem } from './apis/EditItem.js'
 import { SaleItemAdd } from './apis/SaleItemAdd.js'
 import {FinalSaleAdd} from './apis/FinalSaleAdd.js'
+import { DailyTotal } from './apis/DailyTotal.js'
 
 var corsOptions = {
   origin: 'http://localhost:3000',
@@ -24,12 +25,7 @@ app.use(express.json());
 app.use(cors(corsOptions))
 dotenv.config()
 
-var headers = (res) => {
-      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-      res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
-      res.setHeader('Access-Control-Allow-Credentials', true);
-}
+
 
 app.get('/as', function (req, res) {
 
@@ -97,6 +93,11 @@ app.post('/sale-item-add' , function(req, res) {
 app.post('/final-sale-add' , function(req , res) {
       FinalSaleAdd(req , res)
 })
+
+app.post('/daily-total' , function(req , res) {
+      DailyTotal(req , res)
+})
+
 // app.post('/save-edited-item' , function(req,res) {
 
 //     var { quantity , profit , price , expiry } = req.body;
