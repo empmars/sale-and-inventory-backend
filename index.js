@@ -14,6 +14,7 @@ import { EditItem } from './apis/EditItem.js'
 import { SaleItemAdd } from './apis/SaleItemAdd.js'
 import {FinalSaleAdd} from './apis/FinalSaleAdd.js'
 import { DailyTotal } from './apis/DailyTotal.js'
+import WeeklyTotal from './apis/WeeklyTotal.js'
 
 var corsOptions = {
   origin: 'http://localhost:3000',
@@ -96,6 +97,10 @@ app.post('/final-sale-add' , function(req , res) {
 
 app.post('/daily-total' , function(req , res) {
       DailyTotal(req , res)
+})
+
+app.post('/weekly-total' , function(req , res) {
+      WeeklyTotal(req , res)
 })
 
 // app.post('/save-edited-item' , function(req,res) {

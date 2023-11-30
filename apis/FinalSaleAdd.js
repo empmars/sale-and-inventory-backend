@@ -5,34 +5,46 @@ export async function FinalSaleAdd(req, res) {
 
         var client = await db.connect()
         var { data, profitArr, total } = req.body
-        var date = new Date().toString()
-        date = date.slice(0 , 15)
+        var date = new Date().toISOString()
+        date = date.split('T')[0]
 
-        await data.forEach((cur, i) => {
-            try {
+
+        Promise.all(
+
+        await data.map(async (cur, i) => {
+            
 
                 var profit = profitArr[i]
                 var totalProfit = profitArr.reduce((acc, cur) => { return acc + cur }, 0)
-                client.sql`INSERT INTO sale (name , quantity, price , profit, date) VALUES (
+                await client.sql`INSERT INTO sale (name , quantity, price , profit, date) VALUES (
                     ${cur.name},
                     ${cur.reqQuan},
                     ${cur.FinalPrice},
                     ${cur.profit},
                     ${date}
                 )`
+
+                await client.sql`UPDATE items SET quantity = quantity - ${cur.reqQuan} where name = ${cur.name}`
+                console.log(cur.name)
+                var quanRem = await client.sql`SELECT quantity FROM items WHERE name = ${cur.name}` 
+                console.log(quanRem)
+                if(quanRem.rows[0].quantity < 1) {
+                    await client.sql`DELETE FROM items WHERE name = ${cur.name}`
+                }
                 if (i === data.length - 1) {
 
-                    client.sql`INSERT INTO sale (date , total_sale , total_profit) VALUES (
+                    await client.sql`INSERT INTO sale (date , total_sale , total_profit) VALUES (
                         ${date},
                         ${total},
                         ${totalProfit}
                     )`
 
                 }
-            } catch (err) {
-                res.json('err')
-            }
+            
         })
+        
+            )
+      
         res.json('success')
     } catch (err) {
         res.json('err')
