@@ -15,6 +15,10 @@ import { SaleItemAdd } from './apis/SaleItemAdd.js'
 import {FinalSaleAdd} from './apis/FinalSaleAdd.js'
 import { DailyTotal } from './apis/DailyTotal.js'
 import WeeklyTotal from './apis/WeeklyTotal.js'
+import { MonthlyTotal } from './apis/MonthlyTotal.js'
+import { MonthlyProfit } from './apis/MonthlyProfit.js'
+import WeeklyProfit from './apis/WeeklyProfit.js'
+import { DailyProfit } from './apis/DailyProfit.js'
 
 var corsOptions = {
   origin: 'http://localhost:3000',
@@ -99,10 +103,26 @@ app.post('/daily-total' , function(req , res) {
       DailyTotal(req , res)
 })
 
+
 app.post('/weekly-total' , function(req , res) {
       WeeklyTotal(req , res)
 })
 
+app.post('/monthly-total' , function(req , res) {
+      MonthlyTotal(req , res)
+})
+
+app.post('/daily-profit' , function(req , res) {
+      DailyProfit(req , res)
+})
+
+app.post('/weekly-profit' , function(req , res) {
+      WeeklyProfit(req , res)
+})
+
+app.post('/monthly-profit' , function(req , res) {
+      MonthlyProfit(req , res)
+})
 // app.post('/save-edited-item' , function(req,res) {
 
 //     var { quantity , profit , price , expiry } = req.body;
