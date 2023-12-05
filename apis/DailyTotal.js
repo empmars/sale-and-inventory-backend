@@ -9,6 +9,7 @@ export async function DailyTotal(req, res) {
     var sale = await client.sql`SELECT sum(total_sale) FROM sale WHERE date = ${date}`
    
     res.json(sale.rows[0].sum)
+    console.log(sale.rows)
     } catch(err) {
         res.json('err')
     }

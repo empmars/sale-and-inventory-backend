@@ -15,12 +15,14 @@ export async function FinalSaleAdd(req, res) {
             
 
                 var profit = profitArr[i]
+                console.log(profit)
                 var totalProfit = profitArr.reduce((acc, cur) => { return acc + cur }, 0)
-                await client.sql`INSERT INTO sale (name , quantity, price , profit, date) VALUES (
+                await client.sql`INSERT INTO sale (name , quantity, price , profit, discount, date) VALUES (
                     ${cur.name},
                     ${cur.reqQuan},
                     ${cur.FinalPrice},
-                    ${cur.profit},
+                    ${profit},
+                    ${cur.discount},
                     ${date}
                 )`
 

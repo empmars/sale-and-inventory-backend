@@ -25,7 +25,7 @@ export async function SaleItemAdd(req, res) {
         var result = {
             name: name ,
             reqQuan: reqQuan ,
-            amountToSubtract: amountToSubtract ,
+            discount: amountToSubtract ,
             FinalPrice: FinalPrice  
             }
         
