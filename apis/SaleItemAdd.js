@@ -8,9 +8,7 @@ export async function SaleItemAdd(req, res) {
 
 
         var result = await client.sql`SELECT * FROM items WHERE name = ${name}`
-        console.log(result.rows)
         var {price , profit} = result.rows[0]
-    console.log(price)
         reqQuan = Number(reqQuan)
         reqDisc = Number(reqDisc)
         price = Number(price)
@@ -19,6 +17,7 @@ export async function SaleItemAdd(req, res) {
         var amountToSubtract = (reqDisc/100) * PriceBeforeDisc
 
         profit = profit - amountToSubtract
+        console.log(profit , 'asssssssssssssssasas')
 
 
         var FinalPrice = PriceBeforeDisc -  amountToSubtract

@@ -14,6 +14,7 @@ export async function FilterSaleDate(req, res) {
         console.log(fromDate , toDate)
 
         var sale = await client.sql`SELECT * FROM sale WHERE date BETWEEN ${fromDate} AND ${toDate}`
+        console.log(sale)
         res.json(sale.rows)
 
     } catch(err) {
