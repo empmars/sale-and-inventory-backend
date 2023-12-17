@@ -49,7 +49,7 @@ app.post('/add-item', function (req, res) {
 
 
 app.post('/list-search-edit', function (req, res) {
-     
+     console.log('asas')
       getItemSearch(req, res)
 })
 
