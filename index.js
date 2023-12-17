@@ -25,7 +25,7 @@ import { CheckItemStatistics } from './apis/CheckItemStatistics.js'
 import { DeleteItem } from './apis/DeleteItem.js'
 
 var corsOptions = {
-  origin: 'https://sale-an-inventory-front.vercel.app/',
+  origin: 'https://sale-an-inventory-front.vercel.app',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
