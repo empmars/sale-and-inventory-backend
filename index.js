@@ -20,6 +20,8 @@ import { MonthlyProfit } from './apis/MonthlyProfit.js'
 import WeeklyProfit from './apis/WeeklyProfit.js'
 import { DailyProfit } from './apis/DailyProfit.js'
 import { FilterSaleDate } from './apis/FilterSaleByDate.js'
+import { FilterTwoFinal } from './apis/FilterTwoFinal.js'
+import { CheckItemStatistics } from './apis/CheckItemStatistics.js'
 
 var corsOptions = {
   origin: 'http://localhost:3000',
@@ -125,8 +127,17 @@ app.post('/monthly-profit' , function(req , res) {
       MonthlyProfit(req , res)
 })
 
+app.post('/check-item-statistics' , function(req , res) {
+      CheckItemStatistics(req , res)
+})
+
 app.post('/filter-sale-date' , function(req,res) {
       FilterSaleDate(req,res)
+})
+
+
+app.post('/filter-two-final' , function(req,res) {
+      FilterTwoFinal(req,res)
 })
 // app.post('/save-edited-item' , function(req,res) {
 
